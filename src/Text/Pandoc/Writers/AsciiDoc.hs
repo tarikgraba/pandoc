@@ -411,12 +411,18 @@ inlineToAsciiDoc opts (Quoted DoubleQuote lst) =
 inlineToAsciiDoc _ (Code _ str) = return $
   text "`" <> text (escapeStringUsing (backslashEscapes "`") str) <> "`"
 inlineToAsciiDoc _ (Str str) = return $ text $ escapeString str
-inlineToAsciiDoc _ (Math InlineMath str) =
-  return $ "latexmath:[$" <> text str <> "$]"
-inlineToAsciiDoc _ (Math DisplayMath str) =
+inlineToAsciiDoc opts (Math InlineMath str) = do
+  let content = if isEnabled Ext_tex_math_bare opts
+                then text str
+                else "$" <> text str <> "$"
+  return $ "latexmath:[" <> content <> "]"
+inlineToAsciiDoc opts (Math DisplayMath str) = do
+  let content = if isEnabled Ext_tex_math_bare opts
+                then text str
+                else "\\[" <> text str <> "\\]"
   return $
       blankline <> "[latexmath]" $$ "++++" $$
-      "\\[" <> text str <> "\\]"
+      content
       $$ "++++" $$ blankline
 inlineToAsciiDoc _ il@(RawInline f s)
   | f == "asciidoc" = return $ text s

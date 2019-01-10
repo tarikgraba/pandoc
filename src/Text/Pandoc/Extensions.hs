@@ -172,6 +172,7 @@ data Extension =
     | Ext_tex_math_dollars    -- ^ TeX math between $..$ or $$..$$
     | Ext_tex_math_double_backslash  -- ^ TeX math btw \\(..\\) \\[..\\]
     | Ext_tex_math_single_backslash  -- ^ TeX math btw \(..\) \[..\]
+    | Ext_tex_math_bare              -- ^ Output Tex math without delimiters
     | Ext_yaml_metadata_block -- ^ YAML metadata block
     deriving (Show, Read, Enum, Eq, Ord, Bounded, Data, Typeable, Generic)
 
